@@ -1,0 +1,17 @@
+html{font-family: Helvetica, Arial, sans-serif; background: #111111; color: #efefef; size: 200%}
+body{text-align: center; margin: 0}
+body h1{font-size: 250%}
+.searchbox input{border: 1px solid #ffffff; background: #444444; color: #efefef; border-radius: 5px; padding: 10px; margin-bottom: 18px; font-size: 100%}
+.searchbox input[type=text]{width: 30%;}
+.searchbox input[type=submit]:hover{background: lightblue; color: black}
+.searchbar{margin: 14px}
+.searchbar input{border: 1px solid #ffffff; background: #444444; color: #efefef; border-radius: 5px; padding: 8px; margin-bottom: 18px; font-size: 90%}
+.searchbar input[type=text]{width: 30%;}
+.searchbar input[type=submit]:hover{background: lightblue; color: black}
+.searchbar label{font-size: 120%}
+.resultsheader{margin-bottom: 12px}
+.results{background: #222222; border-top: 1px solid #777777; font-size: 150%}
+.result{margin: 8px}
+.result a{text-decoration: none; color: lightblue}
+.result a:visited{color: orchid}
+.result a:hover{text-decoration: underline}

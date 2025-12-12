@@ -1,14 +1,28 @@
 <?php
 
-// Configuration temporarily here.
-$config = array("mhost" => "localhost",
-"muser" => "",
-"mpass" => "",
-"mdb" => "");
+// Get the config.
+require("config.php");
 
+// Connect to the database with the config details.
 $db = mysqli_connect($config["mhost"], $config["muser"], $config["mpass"], $config["mdb"]);
 
-// Will probably want to verify the tables exist etc. TODO
+// Create the tables if they don't exist already.
+$db->query("CREATE TABLE IF NOT EXISTS `pages` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `url` varchar(2048) NOT NULL,
+  `timescraped` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `content` mediumtext NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `url` (`url`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
+$db->query("CREATE TABLE IF NOT EXISTS `robots` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `url` varchar(2048) NOT NULL,
+  `timescraped` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `content` mediumtext NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `url` (`url`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
 
 // The page for search results.
 if (isset($_GET["q"])) {
@@ -44,9 +58,9 @@ if (isset($_GET["q"])) {
     while ($row = $results->fetch_assoc()) {
       if (preg_match("/<title>(.+?)<\/title>/i", $row["content"])) {
         // Kind of a hack here to isolate the title text. Probably isn't efficient.
-        echo("<div class='result'><a href='" . htmlspecialchars($row["url"]) . "'><h4>"
+        echo("<div class='result'><a href='" . htmlspecialchars($row["url"]) . "'>"
          . htmlspecialchars(preg_replace("/.*<title>(.+?)<\/title>.*/is", "$1", $row["content"])) .
-        "</h4></a></div>");
+        "</a></div>");
       }
     }
   }
@@ -58,6 +72,10 @@ if (isset($_GET["q"])) {
 }
 // The home page (just a searchbar and a title basically).
 else {
+  $count = $db->query("SELECT COUNT(*) FROM pages");
+  while ($c = $count->fetch_row()) {
+    $pages = $c[0];
+  }
   echo("<!DOCTYPE html>
 <html lang='en'>
 <head>
@@ -73,6 +91,9 @@ else {
       <input type='text' name='q'>
       <input type='submit' value='Search'>
     </form>
+  </div>
+  <div class='statistics'>
+    " . $pages . " webpage" . (($pages == 1) ? "" : "s") . " crawled.
   </div>
 </body>
 </html>
