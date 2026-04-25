@@ -46,7 +46,7 @@ if (isset($_GET["q"])) {
   <meta charset='UTF-8'>
   <title>SelfSearch</title>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
-  <link rel='stylesheet' href='/styles.css'>
+  <link rel='stylesheet' href='styles.css'>
 </head>
 <body>
   <div class='searchbar'>
@@ -87,7 +87,7 @@ else {
   <meta charset='UTF-8'>
   <title>SelfSearch</title>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
-  <link rel='stylesheet' href='/styles.css'>
+  <link rel='stylesheet' href='styles.css'>
 </head>
 <body>
   <h1>SelfSearch</h1>
