@@ -12,6 +12,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `pages` (
   `url` varchar(2048) NOT NULL,
   `timescraped` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `content` mediumtext NOT NULL,
+  `title` varchar(60) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `url` (`url`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
@@ -20,6 +21,13 @@ $db->query("CREATE TABLE IF NOT EXISTS `robots` (
   `url` varchar(2048) NOT NULL,
   `timescraped` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `content` mediumtext NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `url` (`url`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
+$db->query("CREATE TABLE IF NOT EXISTS `tocrawl` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `url` varchar(2048) NOT NULL,
+  `timeadded` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `url` (`url`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
@@ -56,12 +64,9 @@ if (isset($_GET["q"])) {
   while ($id = $ids->fetch_assoc()) {
     $results = $db->query("SELECT * FROM `pages` WHERE id='" . $db->real_escape_string($id["id"]) . "'");
     while ($row = $results->fetch_assoc()) {
-      if (preg_match("/<title>(.+?)<\/title>/i", $row["content"])) {
-        // Kind of a hack here to isolate the title text. Probably isn't efficient.
-        echo("<div class='result'><a href='" . htmlspecialchars($row["url"]) . "'>"
-         . htmlspecialchars(preg_replace("/.*<title>(.+?)<\/title>.*/is", "$1", $row["content"])) .
-        "</a></div>");
-      }
+      echo("<div class='result'><a href='" . htmlspecialchars($row["url"]) . "'>"
+      . htmlspecialchars($row["title"])
+      . "</a></div>");
     }
   }
   
